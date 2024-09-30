@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2010s Music</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: transparent;
+            color: black;
+            text-align: center;
+        }
+
+        #quiz-container {
+            background-color: transparent;
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        #logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        #next-button {
+            background-color: white;
+            color: black;
+            border: 2px solid #ff9900;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #next-button:hover {
+            background-color: #ffcc00;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s forwards;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <img id="logo" src="https://i.imgur.com/cyZ0Z21.png" alt="DC Comics Logo">
+    <h1>2010s Music</h1>
+    <div id="question-container">
+        <div class="question" id="question">Loading question...</div>
+        <div class="answer" id="answer">Loading answer...</div>
+        <button id="next-button" onclick="nextQuestion()">Next Question</button>
+    </div>
+</div>
+
+<script>
+    // Question and answers data
+    const quizData = [
+        { question: "Which British artist released numerous albums in the 2010s using only maths symbols as titles?", answer: "Ed Sheeran" },
+        { question: "What chemical element did Sia and David Guetta sing about on their 2011 collaboration?", answer: "Titanium" },
+        { question: "According to the 2015 song ‘Hotline Bling’, Drake’s ex used to call him on his what?", answer: "Cell phone" },
+        { question: "What year in the 2010s was the last ever new generation iPod released?", answer: "2019" },
+        { question: "Which famous archaeological site did Bastille name their 2013 breakthrough single after?", answer: "Pompeii" },
+        { question: "K-pop band BTS achieved their first UK top 20 hit in 2019. Which song of theirs achieved this feat?", answer: "Boy With Luv (featuring Halsey)" },
+        { question: "The ‘Despacito’ remix in 2017 hit number one on the UK charts. Which artist featured on the remix?", answer: "Justin Bieber" },
+        { question: "The hit single ‘Vossi Bop’ came from which 2019 grime album?", answer: "Heavy Is The Head" },
+        { question: "In what year was Kendrick Lamar’s breakthrough album ‘good kidd, m.A.A.d city’ released?", answer: "2012" },
+        { question: "Foo Fighters dropped out of headlining Glastonbury Festival in 2015. Which female-led rock band replaced them?", answer: "Florence + the Machine" },
+        { question: "Katy Perry had four UK number one hits in the 2010s. Can you name two of those number one hits?", answer: "California Gurls, Part Of Me, Roar, Feels" },
+        { question: "What is the name of the last album Childish Gambino released in the 2010s?", answer: "Awaken, My Love!" },
+        { question: "‘Can’t Stop the Feeling!’ by Justin Timberlake was written for which 2016 animated movie?", answer: "Trolls" },
+        { question: "According to the 2010 dubstep hit, what did Magnetic Man need?", answer: "Air" },
+        { question: "Which band fronted by Matty Healy released three albums in the 2010s?", answer: "The 1975" },
+        { question: "What is Imagine Dragons’ longest running single on the UK charts?", answer: "Radioactive (at 107 weeks!)" },
+        { question: "Which pop artist featured on Pitbull’s 2014 hit single ‘Timber’?", answer: "Kesha" },
+        { question: "Swedish House Mafia and Avicii are artists belonging to which popular early-mid 2010s genre?", answer: "EDM" },
+        { question: "What car brand is mentioned in the title of Post Malone’s 2018 album?", answer: "Bentley (beerbongs & bentleys)" },
+        { question: "In 2019, who became the first female artist to replace themselves at number one on the official UK singles chart?", answer: "Ariana Grande (‘break up with your girlfriend, i’m bored’ replaced ‘7 rings’)" },
+        { question: "The song ‘Gangnam Style’ featured a dance in its music video which took the world by storm in 2012. Which artist released the song?", answer: "Psy" },
+        { question: "Which genre outsold rock music for the first time ever in the 2010s?", answer: "Rap" },
+        { question: "Who won British Album of the Year at the 2017 Brit Awards with their final studio album?", answer: "David Bowie (Blackstar)" },
+        { question: "Eminem released a sequel to which of his earlier albums in 2013?", answer: "The Marshall Mathers LP" },
+        { question: "Which Latin American capital city did Camila Cabello sing about in her 2017 hit single?", answer: "Havana" },
+        { question: "Who released the 2017 album ‘Stranger in the Alps’?", answer: "Phoebe Bridgers" },
+        { question: "What colour is mentioned in the title of Cardi B’s 2017 breakthrough single?", answer: "Yellow (Bodak Yellow)" },
+        { question: "Which official World Cup song did Shakira release in 2010?", answer: "Waka Waka" },
+        { question: "What kind of games did Lana Del Rey sing about in her viral 2011 song?", answer: "Video Games" },
+        { question: "Which U.S city do The Chainsmokers mention in their 2016 hit single ‘Closer’?", answer: "Boulder, Colorado" },
+        { question: "2011’s ‘Watch The Throne’ was a collaboration album between which two American rappers?", answer: "Jay-Z & Kanye West" },
+        { question: "How many studio albums did Taylor Swift release in the 2010s?", answer: "5" },
+        { question: "Which dance song by one-hit wonder Duck Sauce was named after a popular American singer and actress?", answer: "Barbra Streisand" },
+        { question: "Beyoncé’s 2016 album shares its name with which sweet drink?", answer: "Lemonade" },
+        { question: "In 2013, who asked us to clap along if we felt like “a room without a roof”?", answer: "Pharrell Williams" },
+        { question: "From which country do popular 2010s boyband 5 Seconds of Summer originate from?", answer: "Australia" },
+        { question: "Which 2011 English indie rock album included the songs ‘If You Wanna’ and ‘Norgaard’?", answer: "The Vaccines – What Did You Expect From The Vaccines?" },
+        { question: "How many weeks did Adele’s 2015 album ‘25’ stay at number one on the UK album charts?", answer: "13" },
+        { question: "What animal was the subject of Ylvis’s viral 2013 novelty song?", answer: "The Fox" },
+        { question: "Which indie band released the song ‘Pumped Up Kicks’ in 2010?", answer: "Foster The People" },
+        { question: "How many members of One Direction were there?", answer: "5" },
+        { question: "What was Lady Gaga’s only song to hit number one on the UK singles charts in the 2010s?", answer: "Shallow (with Bradley Cooper)" },
+        { question: "How many consecutive number one albums did Rihanna have on the UK album charts in the 2010s?", answer: "3 (Loud – 2010, Talk That Talk – 2011, Unapologetic – 2012)" },
+        { question: "The first two singles released from Arctic Monkey’s 2013 album ‘AM’ asked questions. Can you name one of these question-based songs?", answer: "‘Do I Wanna Know?’ and/or ‘R U Mine?’" },
+        { question: "Who released the top ten single ‘Lucid Dreams’ in 2018?", answer: "Juice Wrld" },
+        { question: "‘Somebody That I Used To Know’ by Gotye was released in which year of the 2010s?", answer: "2011" },
+        { question: "Which album by Fleetwood Mac was the bestselling vinyl of the 2010s in the UK?", answer: "Rumours" },
+        { question: "Who became the first woman of the 21st century to win a ‘Best Rock Song’ Grammy in 2015, for her band’s single ‘Ain’t It Fun’?", answer: "Hayley Williams" },
+        { question: "What kind of summer did Megan Thee Stallion rap about in 2019?", answer: "Hot Girl Summer" },
+        { question: "Mark Ronson and Bruno Mars’s 2014 collaboration was the second best-selling single of the 2010s in the UK. What was the name of their song?", answer: "Uptown Funk" }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    // Shuffle the quiz data
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i++) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    // Start the quiz
+    shuffle(quizData);
+    showQuestion();
+
+    function showQuestion() {
+        const questionContainer = document.getElementById("question");
+        const answerContainer = document.getElementById("answer");
+
+        questionContainer.innerText = quizData[currentQuestionIndex].question;
+        answerContainer.innerText = "Loading answer...";
+
+        // Fade in effect
+        answerContainer.classList.remove("fadeIn");
+        answerContainer.classList.add("fadeOut");
+
+        setTimeout(() => {
+            answerContainer.innerText = quizData[currentQuestionIndex].answer;
+            answerContainer.classList.remove("fadeOut");
+            answerContainer.classList.add("fadeIn");
+        }, 500);
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            showQuestion();
+        } else {
+            const questionContainer = document.getElementById("question");
+            const answerContainer = document.getElementById("answer");
+            questionContainer.innerText = "Thank you for playing!";
+            answerContainer.innerText = "";
+            document.getElementById("next-button").style.display = "none"; // Hide the next button
+        }
+    }
+</script>
+
+</body>
+</html>
